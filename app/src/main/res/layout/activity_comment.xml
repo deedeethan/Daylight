@@ -22,7 +22,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/type"
+        android:id="@+id/mType"
         android:layout_below="@+id/title"
         android:hint="Enter type of comment"
         android:layout_centerHorizontal="true"
@@ -35,14 +35,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/ratingBar"
 
-        android:layout_below="@+id/type"
+        android:layout_below="@+id/mType"
         android:layout_centerHorizontal="true"/>
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/comment"
-        android:layout_below="@+id/ratingBar"
+        android:layout_below="@+id/mRatingBar"
         android:hint="Enter comment"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="20dp"

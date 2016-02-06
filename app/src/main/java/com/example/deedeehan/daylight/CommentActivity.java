@@ -8,9 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.MarkerOptions;
-
 public class CommentActivity extends AppCompatActivity {
 
     private Button mOkButton;
@@ -73,7 +70,7 @@ public class CommentActivity extends AppCompatActivity {
 
         mOkButton = (Button)findViewById(R.id.okButton);
         mCancelButton = (Button)findViewById(R.id.cancelButton);
-        mTypeText = (EditText)findViewById(R.id.type);
+        mTypeText = (EditText)findViewById(R.id.mType);
         mCommentText = (EditText)findViewById(R.id.comment);
         mRatingBar = (RatingBar) findViewById(R.id.ratingBar);
 
