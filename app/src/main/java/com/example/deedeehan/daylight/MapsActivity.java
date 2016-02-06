@@ -39,7 +39,47 @@ public class MapsActivity extends FragmentActivity implements LocationProvider.L
         setUpMapIfNeeded();
 
         mLocationProvider = new LocationProvider(this, this);
-        handleTaps();
+        GoogleMap.OnMapClickListener mClickListener = new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                // Create new dialog
+                LocationDialogFragment dialog = new LocationDialogFragment();
+                dialog.show(getFragmentManager(), "create_comment_dialog");
+
+                // Set new marker, but only if the person clicked ok and not cancel
+                MarkerOptions options = new MarkerOptions()
+                        .position(latLng)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                mMap.addMarker(options);
+            }
+        };
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+
+        int action = MotionEventCompat.getActionMasked(event);
+
+        switch(action) {
+            case (MotionEvent.ACTION_DOWN) :
+                Log.d(TAG,"Action was DOWN");
+                return true;
+            case (MotionEvent.ACTION_MOVE) :
+                Log.d(TAG,"Action was MOVE");
+                return true;
+            case (MotionEvent.ACTION_UP) :
+                Log.d(TAG,"Action was UP");
+                return true;
+            case (MotionEvent.ACTION_CANCEL) :
+                Log.d(TAG,"Action was CANCEL");
+                return true;
+            case (MotionEvent.ACTION_OUTSIDE) :
+                Log.d(TAG,"Movement occurred outside bounds " +
+                        "of current screen element");
+                return true;
+            default :
+                return super.onTouchEvent(event);
+        }
     }
 
     @Override
@@ -118,7 +158,7 @@ public class MapsActivity extends FragmentActivity implements LocationProvider.L
                 LocationDialogFragment dialog = new LocationDialogFragment();
                 dialog.show(getFragmentManager(), "create_comment_dialog");
 
-                // Set new marker
+                // Set new marker, but only if the person clicked ok and not cancel
                 MarkerOptions options = new MarkerOptions()
                         .position(latLng)
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));

@@ -13,29 +13,7 @@ import android.widget.TextView;
 /**
  * Created by deedeehan on 2/6/16.
  */
-public class LocationDialogFragment {
-
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new AlertDialog.Builder(getActivity())
-                .setIcon(R.drawable.ic_launcher)
-                .setTitle("Enter Password:")
-                .setView(input)
-                .setPositiveButton("OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int whichButton) {
-                                ((MapsActivity)getActivity()).doPositiveClick();
-                            }
-                        })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int whichButton) {
-                                ((MapsActivity)getActivity()).doNegativeClick();
-                            }
-                        }).create();
-
+public class LocationDialogFragment extends DialogFragment {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -45,10 +23,12 @@ public class LocationDialogFragment {
                    // .setTitle(context.getString(""))
                     .setView(input)
                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    // User clicked OK button
-                }
-            });
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User clicked OK button
+                        }
+                    });
+            // probably need to change this to return something because the handleTaps() function
+            // adds a new marker by default to the map
             builder.setNegativeButton(R.string.cancel, null);
 
             AlertDialog dialog = builder.create();

@@ -584,7 +584,7 @@ public class LocationProvider extends Context implements
             else {
                 mLocationCallback.handleNewLocation(location);
             }
-        }
+    }
 
         @Override
         public void onConnectionSuspended(int i) {
