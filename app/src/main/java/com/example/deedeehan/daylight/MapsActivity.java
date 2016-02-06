@@ -32,6 +32,7 @@ public class MapsActivity extends FragmentActivity implements LocationProvider.L
 
     private LocationProvider mLocationProvider;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
