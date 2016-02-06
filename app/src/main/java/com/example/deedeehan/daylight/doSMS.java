@@ -10,11 +10,17 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 /**
  * Created by Matthew on 2/6/2016.
  */
 public class doSMS
 {
+    public Values values = new Values();
+
+    public static String remainder = new String();
+
     private String composeSMS(double latitude, double longitude, String type, int rating, String comment)
     {
         return Integer.toString((int)(latitude * 10000)) + "@$" + Integer.toString((int)(longitude * 10000))
@@ -34,7 +40,7 @@ public class doSMS
     }
 
 
-    public static class SMSBroadcastReceiver extends BroadcastReceiver {
+    public class SMSBroadcastReceiver extends BroadcastReceiver {
 
         private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
         private static final String TAG = "SMSBroadcastReceiver";
@@ -51,12 +57,123 @@ public class doSMS
                     for (int i = 0; i < pdus.length; i++) {
                         messages[i] = SmsMessage.createFromPdu((byte[])pdus[i]);
                     }
-//                    if (messages.length > -1) {
-//                       // Toast.makeText(context, "Message recieved: " + messages[0].getMessageBody(), Toast.LENGTH_LONG).show();
-//                        Log.d("yourawesome", messages[0].getMessageBody());
-//                    }
+                    if (messages.length > -1) {
+                       parseText(messages[0].getMessageBody());
+
+                    }
                 }
             }
         }
+    }
+
+    public void clearValues()
+    {
+        values.clear();
+    }
+
+    public void giveValues()
+    {
+
+    }
+
+    public void parseText(String text)
+    {
+        values.clear();
+
+        while (true) {
+            remainder = remainder.concat(text);
+            if (remainder.isEmpty()) {return;}
+            int first = remainder.indexOf('[');
+            int startindex;
+            if (remainder.charAt(first + 1) == '[') {
+                startindex = first + 1;
+            } else {
+                startindex = first;
+            }
+
+            remainder = remainder.substring(startindex+1);
+
+            int endpos = remainder.indexOf(']');
+            if (endpos == -1) {
+                return;
+            }
+
+            int segmentLength = endpos +2;
+
+            // let's parse! 1. double latitude, 2. double longitude,
+            // 3. String type, 4. double rating (1sf), 5. Str array (hope)
+            double latitude, longitude, rating;
+            int temp_lat, temp_long;
+            String type, current;
+            ArrayList<String> comments = new ArrayList();
+            int end, length;
+
+            end = (remainder.indexOf(','));
+            current = remainder.substring(0, end);
+            temp_lat = Integer.parseInt(current);
+            latitude = (double) temp_lat / 10000;
+
+
+            remainder = remainder.substring(end+2);
+            end = (remainder.indexOf(','));
+            current = remainder.substring(0, end);
+            temp_long = Integer.parseInt(current);
+            longitude = (double) temp_long / 10000;
+
+            // string type
+            remainder = remainder.substring(end+2);
+            end = (remainder.indexOf(','));
+            type = remainder.substring(1, end - 1); // remove quotes
+
+            //double rating
+            remainder = remainder.substring(end+2);
+            end = (remainder.indexOf(','));
+            current = remainder.substring(0, end);
+            rating = Double.parseDouble(current);
+
+            // array of str comments
+            while (remainder.indexOf("')") != end)
+            remainder = remainder.substring(end+3);
+            end = (remainder.indexOf("', "));
+            if (end == -1) {
+                end = (remainder.indexOf("')"));
+                current = remainder.substring(1, end);
+                comments.add(current);
+
+            }
+            // write to filestream
+            values.addValue(latitude, longitude, type,
+            rating, comments);
+            remainder = remainder.substring(segmentLength);
+
+            MapsActivity mapsActivity = new MapsActivity();
+            mapsActivity.refreshMap();
+
+        }
+    }
+
+    public Double accessLatitude(int i)
+    {
+        return values.accessLatitude(i);
+    }
+    public Double accessLongitude(int i)
+    {
+        return values.accessLongitude(i);
+    }
+    public String accessType(int i)
+    {
+        return values.accessType(i);
+    }
+    public Double accessRating(int i)
+    {
+        return values.accessRating(i);
+    }
+    public ArrayList<String> accessComments(int i)
+    {
+        return values.accessComments(i);
+    }
+    public int getLength()
+    {
+        return values.findLength();
     }
 }
