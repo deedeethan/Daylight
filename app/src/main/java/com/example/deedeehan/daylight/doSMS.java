@@ -17,8 +17,8 @@ public class doSMS
 {
     private String composeSMS(int latitude, int longitude, String type, int rating, String comment)
     {
-        return Integer.toString(latitude) + "\\" + Integer.toString(longitude)
-                + "\\" + type + "\\" + Integer.toString(rating) + "\\" + comment;
+        return Integer.toString(latitude) + "@$" + Integer.toString(longitude)
+                + "@$" + type + "@$" + Integer.toString(rating) + "@$" + comment;
     }
     private void sendSMS(String message)
     {
@@ -51,10 +51,10 @@ public class doSMS
                     for (int i = 0; i < pdus.length; i++) {
                         messages[i] = SmsMessage.createFromPdu((byte[])pdus[i]);
                     }
-                    if (messages.length > -1) {
-                        Toast.makeText(context, "Message recieved: " + messages[0].getMessageBody(), Toast.LENGTH_LONG).show();
-                        Log.d("yourawesome", messages[0].getMessageBody());
-                    }
+//                    if (messages.length > -1) {
+//                       // Toast.makeText(context, "Message recieved: " + messages[0].getMessageBody(), Toast.LENGTH_LONG).show();
+//                        Log.d("yourawesome", messages[0].getMessageBody());
+//                    }
                 }
             }
         }
