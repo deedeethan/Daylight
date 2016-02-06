@@ -1,5 +1,6 @@
 package com.example.deedeehan.daylight;
 
+import android.app.DialogFragment;
 import android.content.IntentSender;
 import android.location.Location;
 import android.location.LocationListener;
@@ -24,7 +25,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.File;
 import java.io.FileInputStream;
 
-public class MapsActivity extends FragmentActivity implements LocationProvider.LocationCallback {
+public class MapsActivity extends FragmentActivity implements LocationProvider.LocationCallback,
+        GoogleMap.OnMapLongClickListener,
+LocationDialogFragment.LocationDialogListener{
 
     public static final String TAG = MapsActivity.class.getSimpleName();
 
@@ -32,6 +35,7 @@ public class MapsActivity extends FragmentActivity implements LocationProvider.L
 
     private LocationProvider mLocationProvider;
 
+    private LatLng mostRecentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,20 +44,7 @@ public class MapsActivity extends FragmentActivity implements LocationProvider.L
         setUpMapIfNeeded();
 
         mLocationProvider = new LocationProvider(this, this);
-        GoogleMap.OnMapClickListener mClickListener = new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                // Create new dialog
-                LocationDialogFragment dialog = new LocationDialogFragment();
-                dialog.show(getFragmentManager(), "create_comment_dialog");
-
-                // Set new marker, but only if the person clicked ok and not cancel
-                MarkerOptions options = new MarkerOptions()
-                        .position(latLng)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                mMap.addMarker(options);
-            }
-        };
+        mMap.setOnMapLongClickListener(this);
     }
 
     @Override
@@ -88,7 +79,6 @@ public class MapsActivity extends FragmentActivity implements LocationProvider.L
         super.onResume();
         setUpMapIfNeeded();
         mLocationProvider.connect();
-        handleTaps();
     }
 
     @Override
@@ -151,20 +141,31 @@ public class MapsActivity extends FragmentActivity implements LocationProvider.L
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
     }
 
-    private void handleTaps() {
-        GoogleMap.OnMapClickListener mClickListener = new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                // Create new dialog
-                LocationDialogFragment dialog = new LocationDialogFragment();
-                dialog.show(getFragmentManager(), "create_comment_dialog");
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        LocationDialogFragment dialog = new LocationDialogFragment();
+        dialog.show(getFragmentManager(), "create_comment_dialog");
 
-                // Set new marker, but only if the person clicked ok and not cancel
-                MarkerOptions options = new MarkerOptions()
-                        .position(latLng)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                mMap.addMarker(options);
-            }
-        };
+        mostRecentLocation = latLng;
+    }
+
+    // The dialog fragment receives a reference to this Activity through the
+    // Fragment.onAttach() callback, which it uses to call the following methods
+    // defined by the NoticeDialogFragment.NoticeDialogListener interface
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        // Set new marker, but only if the person clicked ok and not cancel
+        MarkerOptions options = new MarkerOptions()
+                .position(mostRecentLocation)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+        mMap.addMarker(options);
+
+        doSMS newMessage = new doSMS();
+        newMessage.compose(mostRecentLocation.latitude, mostRecentLocation.longitude, "grass", 5, "good grazing place");
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        dialog.dismiss();
     }
 }

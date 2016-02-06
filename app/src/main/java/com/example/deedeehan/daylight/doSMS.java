@@ -15,10 +15,10 @@ import android.widget.Toast;
  */
 public class doSMS
 {
-    private String composeSMS(int latitude, int longitude, String type, int rating, String comment)
+    private String composeSMS(double latitude, double longitude, String type, int rating, String comment)
     {
-        return Integer.toString(latitude) + "\\" + Integer.toString(longitude)
-                + "\\" + type + "\\" + Integer.toString(rating) + "\\" + comment;
+        return Integer.toString((int)(latitude * 10000)) + "@$" + Integer.toString((int)(longitude * 10000))
+                + "@$" + type + "@$" + Integer.toString(rating) + "@$" + comment;
     }
     private void sendSMS(String message)
     {
@@ -26,7 +26,7 @@ public class doSMS
         text.sendTextMessage("+14125203163", null, message, null, null);
     }
 
-    public void compose(int latitude, int longitude, String type, int rating, String comment)
+    public void compose(double latitude, double longitude, String type, int rating, String comment)
     {
         String message = composeSMS(latitude, longitude, type, rating, comment);
         Log.d("pie", "your awesome");
@@ -51,10 +51,10 @@ public class doSMS
                     for (int i = 0; i < pdus.length; i++) {
                         messages[i] = SmsMessage.createFromPdu((byte[])pdus[i]);
                     }
-                    if (messages.length > -1) {
-                        Toast.makeText(context, "Message recieved: " + messages[0].getMessageBody(), Toast.LENGTH_LONG).show();
-                        Log.d("yourawesome", messages[0].getMessageBody());
-                    }
+//                    if (messages.length > -1) {
+//                       // Toast.makeText(context, "Message recieved: " + messages[0].getMessageBody(), Toast.LENGTH_LONG).show();
+//                        Log.d("yourawesome", messages[0].getMessageBody());
+//                    }
                 }
             }
         }
