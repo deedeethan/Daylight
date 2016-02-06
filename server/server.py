@@ -2,13 +2,11 @@ from twilio.rest import TwilioRestClient
 
 def parse_data (msg):
     result = msg.split('@$')
-    print result
     result[0] = (int)(result[0])
     result[1] = (int)(result[1])
     result[2] = (result[2].lower()).encode('ascii', 'replace')
     result[3] = (int)(result[3])
     result[4] = ((result[4].encode('ascii', 'replace')),)
-    print tuple(result)+(1,)
     return tuple(result)+(1,)
  
 
@@ -45,12 +43,21 @@ def main():
                 unsorted_results.append(result)
         
     sorted_results = sorted(unsorted_results)
+    new_list = []
     for x in sorted_results:
         x = list(x)
         x[3] = float(x[3])/float(x[5])
+        print x
         x.pop()
+        new_list.append(x)
+      
+    print new_list
+    
+    client.messages.create(
+        to="+14124448071", 
+        from_="+14125203163", 
+        body=str(new_list))
 
-    for x in sorted_results:
-        print(str(x))
+
 
 main()
