@@ -1,5 +1,6 @@
 package com.example.deedeehan.daylight;
 
+import android.app.DialogFragment;
 import android.content.IntentSender;
 import android.location.Location;
 import android.location.LocationListener;
@@ -25,7 +26,8 @@ import java.io.File;
 import java.io.FileInputStream;
 
 public class MapsActivity extends FragmentActivity implements LocationProvider.LocationCallback,
-        GoogleMap.OnMapLongClickListener {
+        GoogleMap.OnMapLongClickListener,
+LocationDialogFragment.LocationDialogListener{
 
     public static final String TAG = MapsActivity.class.getSimpleName();
 
@@ -33,6 +35,7 @@ public class MapsActivity extends FragmentActivity implements LocationProvider.L
 
     private LocationProvider mLocationProvider;
 
+    private LatLng mostRecentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,10 +146,26 @@ public class MapsActivity extends FragmentActivity implements LocationProvider.L
         LocationDialogFragment dialog = new LocationDialogFragment();
         dialog.show(getFragmentManager(), "create_comment_dialog");
 
+        mostRecentLocation = latLng;
+    }
+
+    // The dialog fragment receives a reference to this Activity through the
+    // Fragment.onAttach() callback, which it uses to call the following methods
+    // defined by the NoticeDialogFragment.NoticeDialogListener interface
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
         // Set new marker, but only if the person clicked ok and not cancel
         MarkerOptions options = new MarkerOptions()
-                .position(latLng)
+                .position(mostRecentLocation)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
         mMap.addMarker(options);
+
+        doSMS newMessage = new doSMS();
+        newMessage.compose((int)(mostRecentLocation.latitude * 10000), (int)(mostRecentLocation.longitude * 10000), "grass", 5, "good grazing place");
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        dialog.dismiss();
     }
 }
