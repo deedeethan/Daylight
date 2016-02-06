@@ -24,7 +24,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.File;
 import java.io.FileInputStream;
 
-public class MapsActivity extends FragmentActivity implements LocationProvider.LocationCallback {
+public class MapsActivity extends FragmentActivity implements LocationProvider.LocationCallback,
+        GoogleMap.OnMapLongClickListener {
 
     public static final String TAG = MapsActivity.class.getSimpleName();
 
@@ -40,20 +41,7 @@ public class MapsActivity extends FragmentActivity implements LocationProvider.L
         setUpMapIfNeeded();
 
         mLocationProvider = new LocationProvider(this, this);
-        GoogleMap.OnMapClickListener mClickListener = new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                // Create new dialog
-                LocationDialogFragment dialog = new LocationDialogFragment();
-                dialog.show(getFragmentManager(), "create_comment_dialog");
-
-                // Set new marker, but only if the person clicked ok and not cancel
-                MarkerOptions options = new MarkerOptions()
-                        .position(latLng)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                mMap.addMarker(options);
-            }
-        };
+        mMap.setOnMapLongClickListener(this);
     }
 
     @Override
@@ -88,7 +76,6 @@ public class MapsActivity extends FragmentActivity implements LocationProvider.L
         super.onResume();
         setUpMapIfNeeded();
         mLocationProvider.connect();
-        handleTaps();
     }
 
     @Override
@@ -151,20 +138,15 @@ public class MapsActivity extends FragmentActivity implements LocationProvider.L
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
     }
 
-    private void handleTaps() {
-        GoogleMap.OnMapClickListener mClickListener = new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                // Create new dialog
-                LocationDialogFragment dialog = new LocationDialogFragment();
-                dialog.show(getFragmentManager(), "create_comment_dialog");
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        LocationDialogFragment dialog = new LocationDialogFragment();
+        dialog.show(getFragmentManager(), "create_comment_dialog");
 
-                // Set new marker, but only if the person clicked ok and not cancel
-                MarkerOptions options = new MarkerOptions()
-                        .position(latLng)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                mMap.addMarker(options);
-            }
-        };
+        // Set new marker, but only if the person clicked ok and not cancel
+        MarkerOptions options = new MarkerOptions()
+                .position(latLng)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+        mMap.addMarker(options);
     }
 }
