@@ -8,7 +8,7 @@
     tools:context="com.example.deedeehan.daylight.CommentActivity">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="New Comment"
@@ -47,6 +47,22 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="20dp"
         android:width="220dp" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@string/ok"
+        android:id="@+id/okButton"
+        android:layout_below="@+id/comment"
+        android:layout_marginLeft="200dp" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel"
+        android:id="@+id/cancelButton"
+        android:layout_below="@+id/comment"
+        android:layout_marginLeft="80dp" />
 
 
 </RelativeLayout>

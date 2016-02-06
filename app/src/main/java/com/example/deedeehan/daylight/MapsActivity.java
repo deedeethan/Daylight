@@ -1,6 +1,7 @@
 package com.example.deedeehan.daylight;
 
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
 import android.location.LocationListener;
@@ -26,8 +27,8 @@ import java.io.File;
 import java.io.FileInputStream;
 
 public class MapsActivity extends FragmentActivity implements LocationProvider.LocationCallback,
-        GoogleMap.OnMapLongClickListener,
-LocationDialogFragment.LocationDialogListener{
+        GoogleMap.OnMapLongClickListener {
+//LocationDialogFragment.LocationDialogListener{
 
     public static final String TAG = MapsActivity.class.getSimpleName();
 
@@ -45,33 +46,6 @@ LocationDialogFragment.LocationDialogListener{
 
         mLocationProvider = new LocationProvider(this, this);
         mMap.setOnMapLongClickListener(this);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event){
-
-        int action = MotionEventCompat.getActionMasked(event);
-
-        switch(action) {
-            case (MotionEvent.ACTION_DOWN) :
-                Log.d(TAG,"Action was DOWN");
-                return true;
-            case (MotionEvent.ACTION_MOVE) :
-                Log.d(TAG,"Action was MOVE");
-                return true;
-            case (MotionEvent.ACTION_UP) :
-                Log.d(TAG,"Action was UP");
-                return true;
-            case (MotionEvent.ACTION_CANCEL) :
-                Log.d(TAG,"Action was CANCEL");
-                return true;
-            case (MotionEvent.ACTION_OUTSIDE) :
-                Log.d(TAG,"Movement occurred outside bounds " +
-                        "of current screen element");
-                return true;
-            default :
-                return super.onTouchEvent(event);
-        }
     }
 
     @Override
@@ -143,29 +117,38 @@ LocationDialogFragment.LocationDialogListener{
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        LocationDialogFragment dialog = new LocationDialogFragment();
-        dialog.show(getFragmentManager(), "create_comment_dialog");
+        createNewComment(latLng);
 
-        mostRecentLocation = latLng;
+//        LocationDialogFragment dialog = new LocationDialogFragment();
+//        dialog.show(getFragmentManager(), "create_comment_dialog");
+//
+//        mostRecentLocation = latLng;
+    }
+
+    private void createNewComment(LatLng latLng) {
+        Intent intent = new Intent(this, CommentActivity.class);
+        intent.putExtra("latitude", latLng.latitude);
+        intent.putExtra("longitude", latLng.longitude);
+        startActivity(intent);
     }
 
     // The dialog fragment receives a reference to this Activity through the
     // Fragment.onAttach() callback, which it uses to call the following methods
     // defined by the NoticeDialogFragment.NoticeDialogListener interface
-    @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
-        // Set new marker, but only if the person clicked ok and not cancel
-        MarkerOptions options = new MarkerOptions()
-                .position(mostRecentLocation)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-        mMap.addMarker(options);
-
-        doSMS newMessage = new doSMS();
-        newMessage.compose(mostRecentLocation.latitude, mostRecentLocation.longitude, "grass", 5, "good grazing place");
-    }
-
-    @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
-        dialog.dismiss();
-    }
+//    @Override
+//    public void onDialogPositiveClick(DialogFragment dialog) {
+//        // Set new marker, but only if the person clicked ok and not cancel
+//        MarkerOptions options = new MarkerOptions()
+//                .position(mostRecentLocation)
+//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+//        mMap.addMarker(options);
+//
+//        doSMS newMessage = new doSMS();
+//        newMessage.compose(mostRecentLocation.latitude, mostRecentLocation.longitude, "grass", 5, "good grazing place");
+//    }
+//
+//    @Override
+//    public void onDialogNegativeClick(DialogFragment dialog) {
+//        dialog.dismiss();
+//    }
 }
