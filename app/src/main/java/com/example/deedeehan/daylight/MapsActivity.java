@@ -5,7 +5,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -37,6 +39,7 @@ public class MapsActivity extends FragmentActivity implements LocationProvider.L
         setUpMapIfNeeded();
 
         mLocationProvider = new LocationProvider(this, this);
+        handleTaps();
     }
 
     @Override
@@ -44,6 +47,7 @@ public class MapsActivity extends FragmentActivity implements LocationProvider.L
         super.onResume();
         setUpMapIfNeeded();
         mLocationProvider.connect();
+        handleTaps();
     }
 
     @Override
@@ -104,5 +108,22 @@ public class MapsActivity extends FragmentActivity implements LocationProvider.L
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location));
         mMap.addMarker(options);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+    }
+
+    private void handleTaps() {
+        GoogleMap.OnMapClickListener mClickListener = new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                // Create new dialog
+                LocationDialogFragment dialog = new LocationDialogFragment();
+                dialog.show(getFragmentManager(), "create_comment_dialog");
+
+                // Set new marker
+                MarkerOptions options = new MarkerOptions()
+                        .position(latLng)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                mMap.addMarker(options);
+            }
+        };
     }
 }
