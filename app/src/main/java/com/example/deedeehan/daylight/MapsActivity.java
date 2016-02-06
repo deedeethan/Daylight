@@ -161,7 +161,7 @@ LocationDialogFragment.LocationDialogListener{
         mMap.addMarker(options);
 
         doSMS newMessage = new doSMS();
-        newMessage.compose((int)(mostRecentLocation.latitude * 10000), (int)(mostRecentLocation.longitude * 10000), "grass", 5, "good grazing place");
+        newMessage.compose(mostRecentLocation.latitude, mostRecentLocation.longitude, "grass", 5, "good grazing place");
     }
 
     @Override

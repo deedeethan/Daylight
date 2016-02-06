@@ -7,7 +7,7 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality. 
     -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.SEND_SMS"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
@@ -40,11 +40,20 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <receiver android:name="com.example.deedeehan.daylight.doSMS$SMSBroadcastReceiver" android:exported="true" >
-            <intent-filter android:priority="2147483647" >
-                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+
+        <receiver
+            android:name=".doSMS$SMSBroadcastReceiver"
+            android:exported="true">
+            <intent-filter android:priority="2147483647">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".CommentActivity"
+            android:label="@string/title_activity_comment"
+            android:theme="@android:style/Theme.Holo.Dialog" >
+        </activity>
     </application>
 
 </manifest>
