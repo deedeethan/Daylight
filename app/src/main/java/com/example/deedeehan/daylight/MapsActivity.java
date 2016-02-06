@@ -1,34 +1,23 @@
 package com.example.deedeehan.daylight;
 
 import android.app.DialogFragment;
-import android.content.Intent;
-import android.content.IntentSender;
 import android.location.Location;
-import android.location.LocationListener;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
-import android.view.MotionEvent;
+import android.widget.EditText;
+import android.widget.RatingBar;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.File;
-import java.io.FileInputStream;
-
 public class MapsActivity extends FragmentActivity implements LocationProvider.LocationCallback,
-        GoogleMap.OnMapLongClickListener {
-//LocationDialogFragment.LocationDialogListener{
+        GoogleMap.OnMapLongClickListener,
+LocationDialogFragment.LocationDialogListener{
 
     public static final String TAG = MapsActivity.class.getSimpleName();
 
@@ -37,6 +26,9 @@ public class MapsActivity extends FragmentActivity implements LocationProvider.L
     private LocationProvider mLocationProvider;
 
     private LatLng mostRecentLocation;
+    private String type;
+    private String comment;
+    private int numStars;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,38 +109,44 @@ public class MapsActivity extends FragmentActivity implements LocationProvider.L
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        createNewComment(latLng);
+        //createNewComment(latLng);
 
-//        LocationDialogFragment dialog = new LocationDialogFragment();
-//        dialog.show(getFragmentManager(), "create_comment_dialog");
-//
-//        mostRecentLocation = latLng;
+        LocationDialogFragment dialog = new LocationDialogFragment();
+        dialog.show(getFragmentManager(), "create_comment_dialog");
+
+        mostRecentLocation = latLng;
     }
 
-    private void createNewComment(LatLng latLng) {
-        Intent intent = new Intent(this, CommentActivity.class);
-        intent.putExtra("latitude", latLng.latitude);
-        intent.putExtra("longitude", latLng.longitude);
-        startActivity(intent);
-    }
+//    private void createNewComment(LatLng latLng) {
+//        Intent intent = new Intent(this, CommentActivity.class);
+//        intent.putExtra("latitude", latLng.latitude);
+//        intent.putExtra("longitude", latLng.longitude);
+//        startActivity(intent);
+//    }
 
     // The dialog fragment receives a reference to this Activity through the
     // Fragment.onAttach() callback, which it uses to call the following methods
     // defined by the NoticeDialogFragment.NoticeDialogListener interface
-//    @Override
-//    public void onDialogPositiveClick(DialogFragment dialog) {
-//        // Set new marker, but only if the person clicked ok and not cancel
-//        MarkerOptions options = new MarkerOptions()
-//                .position(mostRecentLocation)
-//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-//        mMap.addMarker(options);
-//
-//        doSMS newMessage = new doSMS();
-//        newMessage.compose(mostRecentLocation.latitude, mostRecentLocation.longitude, "grass", 5, "good grazing place");
-//    }
-//
-//    @Override
-//    public void onDialogNegativeClick(DialogFragment dialog) {
-//        dialog.dismiss();
-//    }
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        // Set new marker, but only if the person clicked ok and not cancel
+        MarkerOptions options = new MarkerOptions()
+                .position(mostRecentLocation)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+        mMap.addMarker(options);
+
+        doSMS newMessage = new doSMS();
+        EditText mTypeText = (EditText)findViewById(R.id.mType);
+        EditText mCommentText = (EditText)findViewById(R.id.comment);
+        RatingBar mRatingBar = (RatingBar)findViewById(R.id.ratingBar);
+        type = mTypeText.getText().toString();
+        comment = mCommentText.getText().toString();
+        numStars = mRatingBar.getNumStars();
+        newMessage.compose(mostRecentLocation.latitude, mostRecentLocation.longitude, type, numStars, comment);
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        dialog.dismiss();
+    }
 }

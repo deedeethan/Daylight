@@ -7,6 +7,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -26,6 +27,11 @@ public class LocationDialogFragment extends DialogFragment {
 
     // Use this instance of the interface to deliver action events
     LocationDialogListener mListener;
+    public String type;
+    public String comment;
+    public int numStars;
+    public double latitude;
+    public double longitude;
 
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
     @Override
@@ -48,10 +54,12 @@ public class LocationDialogFragment extends DialogFragment {
         Context context = getActivity();
         final EditText type = new EditText(context);
         final EditText comment = new EditText(context);
+
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
         AlertDialog.Builder builder = new AlertDialog.Builder(context)
                 .setTitle("New Comment")
-                .setView(type)
-                .setView(comment)
+                .setView(inflater.inflate(R.layout.dialog_comment, null))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         mListener.onDialogPositiveClick(LocationDialogFragment.this);
@@ -68,5 +76,15 @@ public class LocationDialogFragment extends DialogFragment {
 
         AlertDialog dialog = builder.create();
         return dialog;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt("rating", numStars);
+        outState.putString("type", type);
+        outState.putString("comment", comment);
+        outState.putDouble("latitude", latitude);
+        outState.putDouble("longitude", longitude);
+        super.onSaveInstanceState(outState);
     }
 }
