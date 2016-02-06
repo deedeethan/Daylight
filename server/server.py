@@ -47,16 +47,13 @@ def main():
     for x in sorted_results:
         x = list(x)
         x[3] = float(x[3])/float(x[5])
-        print x
         x.pop()
         new_list.append(x)
       
-    print new_list
-    
     client.messages.create(
         to="+14124448071", 
         from_="+14125203163", 
-        body=str(new_list))
+        body="str(new_list))"
 
 
 

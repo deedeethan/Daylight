@@ -23,6 +23,27 @@ public class Values
         comments.add(comm);
     }
 
+    public Double accessLatitude(int i)
+    {
+        return latitude.get(i);
+    }
+    public Double accessLongitude(int i)
+    {
+        return longitude.get(i);
+    }
+    public String accessType(int i)
+    {
+        return type.get(i);
+    }
+    public Double accessRating(int i)
+    {
+        return rating.get(i);
+    }
+    public ArrayList<String> accessComments(int i)
+    {
+        return comments.get(i);
+    }
+
     public void addValueMap(double lati, double longi, String typ,
                          double rati, String comm)
     {

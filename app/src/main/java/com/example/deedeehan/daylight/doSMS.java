@@ -66,6 +66,16 @@ public class doSMS
         }
     }
 
+    public void clearValues()
+    {
+        values.clear();
+    }
+
+    public void giveValues()
+    {
+
+    }
+
     public void parseText(String text)
     {
         values.clear();
@@ -137,5 +147,30 @@ public class doSMS
             remainder = remainder.substring(segmentLength);
 
         }
+    }
+
+    public Double accessLatitude(int i)
+    {
+        return values.accessLatitude(i);
+    }
+    public Double accessLongitude(int i)
+    {
+        return values.accessLongitude(i);
+    }
+    public String accessType(int i)
+    {
+        return values.accessType(i);
+    }
+    public Double accessRating(int i)
+    {
+        return values.accessRating(i);
+    }
+    public ArrayList<String> accessComments(int i)
+    {
+        return values.accessComments(i);
+    }
+    public int getLength()
+    {
+        return values.findLength();
     }
 }

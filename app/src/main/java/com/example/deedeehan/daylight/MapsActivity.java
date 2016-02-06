@@ -13,11 +13,16 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity implements LocationProvider.LocationCallback,
         GoogleMap.OnMapLongClickListener,
 LocationDialogFragment.LocationDialogListener{
+
+    public doSMS dosms = new doSMS();
 
     public static final String TAG = MapsActivity.class.getSimpleName();
 
@@ -148,6 +153,22 @@ LocationDialogFragment.LocationDialogListener{
 //            numStars = mRatingBar.getNumStars();
 //            newMessage.compose(mostRecentLocation.latitude, mostRecentLocation.longitude, type, numStars, comment);
 //        }
+    }
+
+    public void refreshMap() {
+        mMap.clear();
+        int n = dosms.getLength();
+        for (int i = 0; i < n; i++) {
+            Double lati = dosms.accessLatitude(i);
+            Double longi = dosms.accessLongitude(i);
+            String type = dosms.accessType(i);
+            Double rati = dosms.accessRating(i);
+            ArrayList<String> comments = dosms.accessComments(i);
+
+         mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(lati, longi))
+                    .title(type));
+        }
     }
 
     @Override
