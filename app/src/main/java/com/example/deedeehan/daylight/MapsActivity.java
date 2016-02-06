@@ -1,29 +1,19 @@
 package com.example.deedeehan.daylight;
 
 import android.app.DialogFragment;
-import android.content.IntentSender;
 import android.location.Location;
-import android.location.LocationListener;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
-import android.view.MotionEvent;
+import android.widget.EditText;
+import android.widget.RatingBar;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.io.File;
-import java.io.FileInputStream;
 
 public class MapsActivity extends FragmentActivity implements LocationProvider.LocationCallback,
         GoogleMap.OnMapLongClickListener,
@@ -36,6 +26,9 @@ LocationDialogFragment.LocationDialogListener{
     private LocationProvider mLocationProvider;
 
     private LatLng mostRecentLocation;
+    private String type;
+    private String comment;
+    private int numStars;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,33 +38,6 @@ LocationDialogFragment.LocationDialogListener{
 
         mLocationProvider = new LocationProvider(this, this);
         mMap.setOnMapLongClickListener(this);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event){
-
-        int action = MotionEventCompat.getActionMasked(event);
-
-        switch(action) {
-            case (MotionEvent.ACTION_DOWN) :
-                Log.d(TAG,"Action was DOWN");
-                return true;
-            case (MotionEvent.ACTION_MOVE) :
-                Log.d(TAG,"Action was MOVE");
-                return true;
-            case (MotionEvent.ACTION_UP) :
-                Log.d(TAG,"Action was UP");
-                return true;
-            case (MotionEvent.ACTION_CANCEL) :
-                Log.d(TAG,"Action was CANCEL");
-                return true;
-            case (MotionEvent.ACTION_OUTSIDE) :
-                Log.d(TAG,"Movement occurred outside bounds " +
-                        "of current screen element");
-                return true;
-            default :
-                return super.onTouchEvent(event);
-        }
     }
 
     @Override
@@ -143,17 +109,26 @@ LocationDialogFragment.LocationDialogListener{
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        LocationDialogFragment dialog = new LocationDialogFragment();
+        //createNewComment(latLng);
+
+        LocationDialogFragment dialog = new LocationDialogFragment(latLng);
         dialog.show(getFragmentManager(), "create_comment_dialog");
 
         mostRecentLocation = latLng;
     }
 
+//    private void createNewComment(LatLng latLng) {
+//        Intent intent = new Intent(this, CommentActivity.class);
+//        intent.putExtra("latitude", latLng.latitude);
+//        intent.putExtra("longitude", latLng.longitude);
+//        startActivity(intent);
+//    }
+
     // The dialog fragment receives a reference to this Activity through the
     // Fragment.onAttach() callback, which it uses to call the following methods
     // defined by the NoticeDialogFragment.NoticeDialogListener interface
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
+    public void onDialogPositiveClick(DialogFragment dialog, String type, int numStars, String comment) {
         // Set new marker, but only if the person clicked ok and not cancel
         MarkerOptions options = new MarkerOptions()
                 .position(mostRecentLocation)
@@ -161,7 +136,18 @@ LocationDialogFragment.LocationDialogListener{
         mMap.addMarker(options);
 
         doSMS newMessage = new doSMS();
-        newMessage.compose(mostRecentLocation.latitude, mostRecentLocation.longitude, "grass", 5, "good grazing place");
+        newMessage.compose(mostRecentLocation.latitude, mostRecentLocation.longitude, type, numStars, comment);
+//        doSMS newMessage = new doSMS();
+//        EditText mTypeText = (EditText)findViewById(R.id.type);
+//        EditText mCommentText = (EditText)findViewById(R.id.comment);
+//        RatingBar mRatingBar = (RatingBar)findViewById(R.id.ratingBar);
+//        if (mTypeText != null && mCommentText != null) {
+//            Log.d(TAG, "about to send text message");
+//            type = mTypeText.getText().toString();
+//            comment = mCommentText.getText().toString();
+//            numStars = mRatingBar.getNumStars();
+//            newMessage.compose(mostRecentLocation.latitude, mostRecentLocation.longitude, type, numStars, comment);
+//        }
     }
 
     @Override

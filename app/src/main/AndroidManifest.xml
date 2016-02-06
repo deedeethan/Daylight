@@ -49,11 +49,11 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".CommentActivity"
-            android:label="@string/title_activity_comment"
-            android:theme="@android:style/Theme.Holo.Dialog" >
-        </activity>
+        <!--<activity-->
+            <!--android:name=".CommentActivity"-->
+            <!--android:label="@string/title_activity_comment"-->
+            <!--android:theme="@android:style/Theme.Dialog" >-->
+        <!--</activity>-->
     </application>
 
 </manifest>
