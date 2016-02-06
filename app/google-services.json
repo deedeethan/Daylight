@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_id": "daylight-d03e",
+    "project_number": "88989888565",
+    "name": "Daylight"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:88989888565:android:27d689d63f1b7a06",
+        "client_id": "android:com.google.samples.quickstart.signin",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.google.samples.quickstart.signin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "88989888565-csv79vpgfp72n3pg9clehhpg9qct4d07.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.google.samples.quickstart.signin",
+            "certificate_hash": "1B0C74DEC9D9E86122D0ABE42860AA4F4030B29A"
+          }
+        },
+        {
+          "client_id": "88989888565-bq99osbf646qcmvqoi5pv5j8itfh830v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

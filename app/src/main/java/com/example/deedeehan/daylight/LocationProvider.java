@@ -419,22 +419,22 @@ public class LocationProvider extends Context implements
 
     @Override
     public int checkPermission(String permission, int pid, int uid) {
-        return 0;
+        return PackageManager.PERMISSION_GRANTED;
     }
 
     @Override
     public int checkCallingPermission(String permission) {
-        return 0;
+        return PackageManager.PERMISSION_GRANTED;
     }
 
     @Override
     public int checkCallingOrSelfPermission(String permission) {
-        return 0;
+        return PackageManager.PERMISSION_GRANTED;
     }
 
     @Override
     public int checkSelfPermission(String permission) {
-        return 0;
+        return PackageManager.PERMISSION_GRANTED;
     }
 
     @Override
@@ -558,7 +558,7 @@ public class LocationProvider extends Context implements
 
     public void disconnect() {
         if (mGoogleApiClient.isConnected()) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, (com.google.android.gms.location.LocationListener) this);
+            //LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, (com.google.android.gms.location.LocationListener) this);
             mGoogleApiClient.disconnect();
         }
     }
