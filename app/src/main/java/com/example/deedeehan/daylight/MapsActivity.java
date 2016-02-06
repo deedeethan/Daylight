@@ -101,7 +101,7 @@ public class MapsActivity extends FragmentActivity implements LocationProvider.L
         MarkerOptions options = new MarkerOptions()
                 .position(latLng)
                 .title("I am here!")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker));
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location));
         mMap.addMarker(options);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
     }
