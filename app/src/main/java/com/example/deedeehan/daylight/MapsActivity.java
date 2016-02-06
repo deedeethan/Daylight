@@ -111,7 +111,7 @@ LocationDialogFragment.LocationDialogListener{
     public void onMapLongClick(LatLng latLng) {
         //createNewComment(latLng);
 
-        LocationDialogFragment dialog = new LocationDialogFragment();
+        LocationDialogFragment dialog = new LocationDialogFragment(latLng);
         dialog.show(getFragmentManager(), "create_comment_dialog");
 
         mostRecentLocation = latLng;
@@ -128,7 +128,7 @@ LocationDialogFragment.LocationDialogListener{
     // Fragment.onAttach() callback, which it uses to call the following methods
     // defined by the NoticeDialogFragment.NoticeDialogListener interface
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
+    public void onDialogPositiveClick(DialogFragment dialog, String type, int numStars, String comment) {
         // Set new marker, but only if the person clicked ok and not cancel
         MarkerOptions options = new MarkerOptions()
                 .position(mostRecentLocation)
@@ -136,13 +136,18 @@ LocationDialogFragment.LocationDialogListener{
         mMap.addMarker(options);
 
         doSMS newMessage = new doSMS();
-        EditText mTypeText = (EditText)findViewById(R.id.mType);
-        EditText mCommentText = (EditText)findViewById(R.id.comment);
-        RatingBar mRatingBar = (RatingBar)findViewById(R.id.ratingBar);
-        type = mTypeText.getText().toString();
-        comment = mCommentText.getText().toString();
-        numStars = mRatingBar.getNumStars();
         newMessage.compose(mostRecentLocation.latitude, mostRecentLocation.longitude, type, numStars, comment);
+//        doSMS newMessage = new doSMS();
+//        EditText mTypeText = (EditText)findViewById(R.id.type);
+//        EditText mCommentText = (EditText)findViewById(R.id.comment);
+//        RatingBar mRatingBar = (RatingBar)findViewById(R.id.ratingBar);
+//        if (mTypeText != null && mCommentText != null) {
+//            Log.d(TAG, "about to send text message");
+//            type = mTypeText.getText().toString();
+//            comment = mCommentText.getText().toString();
+//            numStars = mRatingBar.getNumStars();
+//            newMessage.compose(mostRecentLocation.latitude, mostRecentLocation.longitude, type, numStars, comment);
+//        }
     }
 
     @Override
