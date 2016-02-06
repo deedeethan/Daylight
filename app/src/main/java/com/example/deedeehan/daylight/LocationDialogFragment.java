@@ -1,5 +1,6 @@
 package com.example.deedeehan.daylight;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -15,23 +16,57 @@ import android.widget.TextView;
  */
 public class LocationDialogFragment extends DialogFragment {
 
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            Context context = getActivity();
-            final EditText input = new EditText(context);
-            AlertDialog.Builder builder = new AlertDialog.Builder(context)
-                   // .setTitle(context.getString(""))
-                    .setView(input)
-                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // User clicked OK button
-                        }
-                    });
-            // probably need to change this to return something because the handleTaps() function
-            // adds a new marker by default to the map
-            builder.setNegativeButton(R.string.cancel, null);
+    /* The activity that creates an instance of this dialog fragment must
+     * implement this interface in order to receive event callbacks.
+     * Each method passes the DialogFragment in case the host needs to query it. */
+    public interface LocationDialogListener {
+        public void onDialogPositiveClick(DialogFragment dialog);
+        public void onDialogNegativeClick(DialogFragment dialog);
+    }
 
-            AlertDialog dialog = builder.create();
-            return dialog;
+    // Use this instance of the interface to deliver action events
+    LocationDialogListener mListener;
+
+    // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        // Verify that the host activity implements the callback interface
+        try {
+            // Instantiate the NoticeDialogListener so we can send events to the host
+            mListener = (LocationDialogListener) activity;
+        } catch (ClassCastException e) {
+            // The activity doesn't implement the interface, throw exception
+            throw new ClassCastException(activity.toString()
+                    + " must implement LocationDialogListener");
+
         }
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Context context = getActivity();
+        final EditText type = new EditText(context);
+        final EditText comment = new EditText(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context)
+                .setTitle("New Comment")
+                .setView(type)
+                .setView(comment)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        mListener.onDialogPositiveClick(LocationDialogFragment.this);
+                    }
+                });
+        // probably need to change this to return something because the handleTaps() function
+        // adds a new marker by default to the map
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mListener.onDialogNegativeClick(LocationDialogFragment.this);
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        return dialog;
+    }
 }
