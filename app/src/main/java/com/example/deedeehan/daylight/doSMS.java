@@ -146,6 +146,9 @@ public class doSMS
             rating, comments);
             remainder = remainder.substring(segmentLength);
 
+            MapsActivity mapsActivity = new MapsActivity();
+            mapsActivity.refreshMap();
+
         }
     }
 
