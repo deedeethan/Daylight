@@ -53,7 +53,7 @@ def main():
     client.messages.create(
         to="+14124448071", 
         from_="+14125203163", 
-        body="str(new_list))"
+        body= str(new_list))
 
 
 

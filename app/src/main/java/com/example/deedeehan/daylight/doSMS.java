@@ -10,6 +10,10 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
 
 /**
@@ -23,24 +27,23 @@ public class doSMS
 
     private String composeSMS(double latitude, double longitude, String type, int rating, String comment)
     {
-        return Integer.toString((int)(latitude * 10000)) + "@$" + Integer.toString((int)(longitude * 10000))
-                + "@$" + type + "@$" + Integer.toString(rating) + "@$" + comment;
+        return Integer.toString((int)(latitude * 10000)) + "\n" + Integer.toString((int)(longitude * 10000))
+                + "\n" + type + "\n" + Integer.toString(rating) + "\n" + comment;
     }
     private void sendSMS(String message)
     {
         SmsManager text = SmsManager.getDefault();
-        text.sendTextMessage("+14125203163", null, message, null, null);
+        text.sendTextMessage("+14125203278", null, message, null, null);
     }
 
     public void compose(double latitude, double longitude, String type, int rating, String comment)
     {
         String message = composeSMS(latitude, longitude, type, rating, comment);
-        Log.d("pie", "your awesome");
         sendSMS(message);
     }
 
 
-    public class SMSBroadcastReceiver extends BroadcastReceiver {
+    public static class SMSBroadcastReceiver extends BroadcastReceiver {
 
         private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
         private static final String TAG = "SMSBroadcastReceiver";
@@ -58,7 +61,7 @@ public class doSMS
                         messages[i] = SmsMessage.createFromPdu((byte[])pdus[i]);
                     }
                     if (messages.length > -1) {
-                       parseText(messages[0].getMessageBody());
+                        // parseText(messages[0].getMessageBody());
 
                     }
                 }
@@ -69,11 +72,6 @@ public class doSMS
     public void clearValues()
     {
         values.clear();
-    }
-
-    public void giveValues()
-    {
-
     }
 
     public void parseText(String text)
