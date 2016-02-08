@@ -32,33 +32,11 @@ public class LocationDialogFragment extends DialogFragment {
 
     // Use this instance of the interface to deliver action events
     LocationDialogListener mListener;
-//    public String type;
-//    public String comment;
-//    public int numStars;
-//
-//    public String getType() {
-//        return type;
-//    }
-//
-//    public void setType(String type) {
-//        this.type = type;
-//    }
-//
-//    public String getComment() {
-//        return comment;
-//    }
-//
-//    public void setComment(String comment) {
-//        this.comment = comment;
-//    }
-//
-//    public int getNumStars() {
-//        return numStars;
-//    }
-//
-//    public void setNumStars(int numStars) {
-//        this.numStars = numStars;
-//    }
+    public double latitude;
+    public double longitude;
+    public String type;
+    public String comment;
+    int numStars;
 
     public double getLatitude() {
         return latitude;
@@ -75,9 +53,6 @@ public class LocationDialogFragment extends DialogFragment {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
-
-    public double latitude;
-    public double longitude;
 
     public LocationDialogFragment () {
         return;
@@ -111,10 +86,6 @@ public class LocationDialogFragment extends DialogFragment {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-//        View view =  inflater.inflate(R.layout.secondefragment, container, false);
-//        mWebView = (WebView) view.findViewById(R.id.activity_main_webview);
-//        progressBar = (ProgressBar) view.findViewById(R.id.progressBar1);
-
         View view = inflater.inflate(R.layout.dialog_comment, null);
         EditText mTypeText = (EditText)view.findViewById(R.id.type);
         EditText mCommentText = (EditText)view.findViewById(R.id.comment);
@@ -132,8 +103,6 @@ public class LocationDialogFragment extends DialogFragment {
                         mListener.onDialogPositiveClick(LocationDialogFragment.this, type, numStars, comment);
                     }
                 });
-        // probably need to change this to return something because the handleTaps() function
-        // adds a new marker by default to the map
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -145,13 +114,16 @@ public class LocationDialogFragment extends DialogFragment {
         return dialog;
     }
 
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        outState.putInt("rating", numStars);
-//        outState.putString("type", type);
-//        outState.putString("comment", comment);
-//        outState.putDouble("latitude", latitude);
-//        outState.putDouble("longitude", longitude);
-//        super.onSaveInstanceState(outState);
-//    }
+    // This function is used to save data when the screen is rotated
+    // ie from vertical to horizontal
+    // Currently, this app does not support changes in screen orientation
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt("rating", numStars);
+        outState.putString("type", type);
+        outState.putString("comment", comment);
+        outState.putDouble("latitude", latitude);
+        outState.putDouble("longitude", longitude);
+        super.onSaveInstanceState(outState);
+    }
 }

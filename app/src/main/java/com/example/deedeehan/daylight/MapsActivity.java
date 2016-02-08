@@ -114,24 +114,12 @@ LocationDialogFragment.LocationDialogListener{
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        //createNewComment(latLng);
-
         LocationDialogFragment dialog = new LocationDialogFragment(latLng);
         dialog.show(getFragmentManager(), "create_comment_dialog");
 
         mostRecentLocation = latLng;
     }
 
-//    private void createNewComment(LatLng latLng) {
-//        Intent intent = new Intent(this, CommentActivity.class);
-//        intent.putExtra("latitude", latLng.latitude);
-//        intent.putExtra("longitude", latLng.longitude);
-//        startActivity(intent);
-//    }
-
-    // The dialog fragment receives a reference to this Activity through the
-    // Fragment.onAttach() callback, which it uses to call the following methods
-    // defined by the NoticeDialogFragment.NoticeDialogListener interface
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, String type, int numStars, String comment) {
         // Set new marker, but only if the person clicked ok and not cancel
@@ -142,17 +130,6 @@ LocationDialogFragment.LocationDialogListener{
 
         doSMS newMessage = new doSMS();
         newMessage.compose(mostRecentLocation.latitude, mostRecentLocation.longitude, type, numStars, comment);
-//        doSMS newMessage = new doSMS();
-//        EditText mTypeText = (EditText)findViewById(R.id.type);
-//        EditText mCommentText = (EditText)findViewById(R.id.comment);
-//        RatingBar mRatingBar = (RatingBar)findViewById(R.id.ratingBar);
-//        if (mTypeText != null && mCommentText != null) {
-//            Log.d(TAG, "about to send text message");
-//            type = mTypeText.getText().toString();
-//            comment = mCommentText.getText().toString();
-//            numStars = mRatingBar.getNumStars();
-//            newMessage.compose(mostRecentLocation.latitude, mostRecentLocation.longitude, type, numStars, comment);
-//        }
     }
 
     public void refreshMap() {
